@@ -22,7 +22,7 @@ Ce projet propose une simulation simple d’un jeu de roulette en ligne de comma
 ## Installation et exécution
 
 ```bash
-git clone https://github.com/maitre_oda/jeu_de_roulette.git
+git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
 cd jeu_roulette.py
 python jeu_roulette.py
 ```
