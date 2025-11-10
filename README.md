@@ -1,4 +1,4 @@
-# Jeu-de-roulette-europ-en
+
 # Jeu de Roulette – Python
 
 Ce projet propose une simulation simple d’un jeu de roulette en ligne de commande. Le joueur commence avec une somme initiale et peut choisir parmi trois stratégies de mise : **Couleur**, **Chiffres** ou **Mixte**. Chaque tour génère un tirage aléatoire et met à jour le solde du joueur en fonction du résultat.
