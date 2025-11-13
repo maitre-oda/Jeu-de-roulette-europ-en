@@ -94,16 +94,16 @@ Stratégie : 1 (Couleur)
 Rouge ou Noir ? : rouge
 Mise sur rouge : 10
 
-🎡 Plus rien ne va plus !
+Plus rien ne va plus !
 Résultat : 23 (rouge)
-✅ Bravo ! Vous gagnez 10
-💰 Nouveau solde : 60
+Bravo ! Vous gagnez 10
+Nouveau solde : 60
 
 Rejouer la même chose ? (o/n) : o
-🎡 Plus rien ne va plus !
+Plus rien ne va plus !
 Résultat : 8 (noir)
-❌ Dommage ! Vous perdez 10
-💰 Nouveau solde : 50
+Dommage ! Vous perdez 10
+Nouveau solde : 50
 ```
 
 ---
