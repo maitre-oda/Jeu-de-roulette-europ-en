@@ -14,11 +14,25 @@ Après chaque manche, il peut **rejouer exactement la même mise** (mêmes param
 - Aucune dépendance externe (utilise `random`, `time`, `sys`).
 
 ### Exécution
+### 🔹 Cloner le dépôt
+#### 💻 macOS / Linux
+Ouvrez un terminal et exécutez :
 ```bash
-python3 roulette.py
+git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
+cd Jeu-de-roulette-europ-en
+python3 jeu_de_roulette_ameliorer.py
 ```
-> Sur Windows, utilisez `py roulette.py` selon votre installation.
-
+🪟 Windows :
+Ouvrez PowerShell ou CMD, puis exécutez :
+```
+git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
+cd Jeu-de-roulette-europ-en
+py jeu_de_roulette_ameliorer.py
+```
+⚠️ Si la commande py ne fonctionne pas, essayez :
+```
+python jeu_de_roulette_ameliorer.py
+```
 ---
 
 ## 🎮 Règles & Stratégies
