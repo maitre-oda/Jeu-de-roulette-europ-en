@@ -101,7 +101,7 @@ Sinon, retour au menu.
 
 ---
 
-## 🧪 Exemple rapide (Couleur)
+## 🧪 Exemple rapide 
 ```
 Solde actuel : 50
 Stratégie : 1 (Couleur)
