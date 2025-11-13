@@ -21,18 +21,18 @@ Ouvrez un terminal et exécutez :
 ```bash
 git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
 cd Jeu-de-roulette-europ-en
-python3 jeu_roulette_ameliorer.py
+python3 jeu_de_roulette.py
 ```
 🪟 Windows :
 Ouvrez PowerShell ou CMD, puis exécutez :
 ```
 git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
 cd Jeu-de-roulette-europ-en
-py jeu_roulette_ameliorer.py
+py jeu_de_roulette.py
 ```
 ⚠️ Si la commande py ne fonctionne pas, essayez :
 ```
-python jeu_roulette_ameliorer.py
+python jeu_de_roulette.py
 ```
 ---
 
