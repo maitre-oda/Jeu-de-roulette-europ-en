@@ -2,6 +2,7 @@
 import random
 import time
 import sys
+import os
 
 # Le joueur va devoir choisir s'il veut miser les couleurs uniquement
 # ou s'il veut miser sur les chiffres uniquement
@@ -16,16 +17,27 @@ couleur = [[noir], [rouge], [vert]]
 historique = []
 argent_joueur = 50
 
+
+FICHIER_HISTORIQUE = "historique_tirages.txt"
+
+if os.path.exists(FICHIER_HISTORIQUE):
+    with open(FICHIER_HISTORIQUE, "r", encoding="utf-8") as f:
+        for ligne in f:
+            ligne = ligne.strip()
+            if not ligne:
+                continue
+            try:
+                n = int(ligne)
+                historique.append(n)
+            except ValueError:
+                continue
+
 mess_depart = [
     "\033[31mCouleur\033[0m (vous misez que sur les couleurs)",
     "\033[31mChiffre\033[0m (vous misez sur les chiffres de 0 à 36)",
     "\033[31mMixte\033[0m (combinaison des deux stratégies)",
     "Quittez la partie\n"
 ]
-
-print (f"{nombre}\n")
-print ("Bienvenue dans le jeu de la Roulette\n")
-
 
 def couleur_ansi(c):
     if c == "rouge": return "\033[31m"   # rouge
@@ -39,6 +51,19 @@ def fmt_tirage(n):
     elif n in noir: c = "noir"
     else: c = "vert"
     return f"{couleur_ansi(c)}{n} {RESET}"
+
+
+print (f"{nombre}\n")
+print ("Bienvenue dans le jeu de la Roulette\n")
+
+if historique:
+    print("Historique global des tirages (50 derniers) :")
+    print(" | ".join(fmt_tirage(n) for n in historique[-50:]))
+    print("-" * 60)
+else:
+    print("Pas encore d'historique global, vous êtes le premier joueur !")
+    print("-" * 60)
+
 
 rejouer = False 
 dernier_choix = None
@@ -212,6 +237,8 @@ while argent_joueur > 0:
     elif tirage in noir : couleur_tirage = "noir"
     elif tirage in vert : couleur_tirage = "vert"
     historique.append(tirage)
+    with open(FICHIER_HISTORIQUE, "a", encoding="utf-8") as f:
+        f.write(str(tirage) + "\n")
                 
     print("\nPlus rien ne va plus ! ...")
     time.sleep(1)
@@ -253,7 +280,7 @@ while argent_joueur > 0:
         argent_joueur += net
 
     print(f"Nouveau solde : {argent_joueur}")
-    print("Historique (20 derniers) :\n"," | ".join(fmt_tirage(n) for n in historique[-20:]))
+    print(" | ".join(fmt_tirage(n) for n in historique[-50:]))
     print("-" * 60)
 
 
