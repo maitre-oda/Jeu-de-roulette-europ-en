@@ -84,7 +84,7 @@ Sinon, retour au menu.
 
 ### Variables internes utilisées
 - `rejouer` (bool) : indique si on répète la même mise au tour suivant  
-- `last_choix`, `last_couleur`, `last_mise_couleur`, `last_liste_numeros`, `last_mise_numero` : mémoires du dernier tour
+- `dernier_choix`, `dernier_couleur`, `dernier_mise_couleur`, `dernier_liste_numeros`, `dernier_mise_numero` : mémoires du dernier tour
 
 ---
 
