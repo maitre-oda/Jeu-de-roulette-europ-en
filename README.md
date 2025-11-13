@@ -1,43 +1,127 @@
+# 🎰 Jeu de Roulette (Python, terminal)
 
-# Jeu de Roulette – Python
+## 📍 Aperçu
+Petit jeu de **roulette** en Python jouable dans le terminal.  
+Le joueur démarre avec un **solde initial** et peut parier selon **trois stratégies** : `Couleur`, `Chiffres`, ou `Mixte`.  
+Après chaque manche, il peut **rejouer exactement la même mise** (mêmes paramètres) sans tout ressaisir.
 
-Ce projet propose une simulation simple d’un jeu de roulette en ligne de commande. Le joueur commence avec une somme initiale et peut choisir parmi trois stratégies de mise : **Couleur**, **Chiffres** ou **Mixte**. Chaque tour génère un tirage aléatoire et met à jour le solde du joueur en fonction du résultat.
+---
 
-## Fonctionnalités
+## 🚀 Lancer le jeu
 
-- Gestion des couleurs (rouge, noir, vert) avec rendu ANSI dans le terminal.
-- Trois types de stratégie :
-  - **Couleur** : miser uniquement sur rouge ou noir.
-  - **Chiffres** : miser sur un ou plusieurs numéros.
-  - **Mixte** : combinaison d’une mise couleur et de numéros.
-- Vérification des mises selon le solde disponible.
-- Affichage du résultat du tirage et mise à jour automatique du solde.
-- Boucle de jeu jusqu’à ce que le joueur n’ait plus d’argent.
+### Prérequis
+- **Python 3.8+**
+- Aucune dépendance externe (utilise `random`, `time`, `sys`).
 
-## Prérequis
-
-- Python 3.x
-- Aucun module externe requis (utilise uniquement `random`, `time`, `os`).
-
-## Installation et exécution
-
+### Exécution
 ```bash
-git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
-cd Jeu-de-roulette-europ-en
-python jeu_roulette.py
+python3 roulette.py
+```
+> Sur Windows, utilisez `py roulette.py` selon votre installation.
+
+---
+
+## 🎮 Règles & Stratégies
+
+### 1️⃣ Stratégie **Couleur**
+- Choisissez **rouge** ou **noir**.
+- **Gain** si la couleur tirée correspond : `+ mise`
+- **Perte** sinon : `- mise`
+
+### 2️⃣ Stratégie **Chiffres**
+- Entrez un ou plusieurs **numéros** (entre 0 et 36).
+- La **mise** saisie est **par numéro**.
+- Si **un de vos numéros sort** :
+  - **Gain net** = `(36 - k) × mise`, où `k` = nombre de numéros joués  
+    (car vous gagnez `35 × mise` sur le bon numéro et perdez `mise` sur chacun des autres)
+- Sinon :
+  - **Perte** = `k × mise`
+
+### 3️⃣ Stratégie **Mixte**
+- Combinez **Couleur** + **Chiffres**.
+- Mises distinctes : `mise_couleur` et `mise_numero` (par numéro).
+- Avec `k` numéros, le **gain net** est :
+  - Numéro **et** couleur OK : `(36 - k) × mise_numero + mise_couleur`
+  - Numéro OK, couleur KO : `(36 - k) × mise_numero - mise_couleur`
+  - Numéro KO, couleur OK : `- k × mise_numero + mise_couleur`
+  - Numéro KO, couleur KO : `- k × mise_numero - mise_couleur`
+
+> ℹ️ Les tirages affichent aussi la **couleur** tirée. Le **0** est considéré **vert**.
+
+---
+
+## 🔁 Rejouer la même mise
+À la fin d’une manche, le programme propose :
+```
+Voulez-vous rejouer la même chose ? (o/n)
 ```
 
-## Structure du fichier
+- Si vous tapez **`o`**, le tour suivant réutilise automatiquement :
+  - **Couleur** : dernière couleur + dernière mise
+  - **Chiffres** : liste de numéros + mise par numéro
+  - **Mixte** : couleur, liste de numéros, mise couleur + mise par numéro
 
-- `jeu_roulette.py` : script principal contenant l’ensemble de la logique du jeu.
+Le programme vérifie que **votre solde** permet de rejouer **exactement** la même configuration :
+- Couleur : `mise ≤ solde`
+- Chiffres : `k × mise ≤ solde`
+- Mixte : `mise_couleur + k × mise_numero ≤ solde`
 
-## Améliorations possibles
+Sinon, retour au menu.
 
-- Ajout d’un menu graphique (TKinter ou autre).
-- Système d’historique des tirages.
-- Gestion d’un mode « casino » avec limites de mises ou bonus.
-- Ajout de tests unitaires.
+### Variables internes utilisées
+- `rejouer` (bool) : indique si on répète la même mise au tour suivant  
+- `last_choix`, `last_couleur`, `last_mise_couleur`, `last_liste_numeros`, `last_mise_numero` : mémoires du dernier tour
 
-## Licence
+---
 
-Projet libre d’utilisation et de modification.
+## 🖥️ Affichage & Couleurs
+- Les couleurs **ANSI** (rouge/noir/vert) sont utilisées pour le tirage.
+- Sur **Windows**, utilisez un terminal compatible ANSI (Windows Terminal, VS Code, ou activez le support ANSI).
+
+---
+
+## 🧩 Validation des entrées
+- Saisie sécurisée des **entiers** (mises/numéros)
+- **Bornes** vérifiées (numéros `0..36`, mises **> 0**)
+- Vérification du **solde disponible** avant validation d’une mise
+
+---
+
+## 🧪 Exemple rapide (Couleur)
+```
+Solde actuel : 50
+Stratégie : 1 (Couleur)
+Rouge ou Noir ? : rouge
+Mise sur rouge : 10
+
+🎡 Plus rien ne va plus !
+Résultat : 23 (rouge)
+✅ Bravo ! Vous gagnez 10
+💰 Nouveau solde : 60
+
+Rejouer la même chose ? (o/n) : o
+🎡 Plus rien ne va plus !
+Résultat : 8 (noir)
+❌ Dommage ! Vous perdez 10
+💰 Nouveau solde : 50
+```
+
+---
+
+## ⚠️ Limitations connues
+- Programme **100% interactif** (pas de mode non interactif / tests automatisés intégrés).
+- **Duplication** de logique entre stratégies (volontaire ici pour rester sans fonctions).
+- Les gains/pertes reflètent la **roulette européenne** avec **payout 35:1** pour un numéro plein.
+
+---
+
+## 💡 Idées d’amélioration
+- Factoriser en **fonctions** (saisie, tirage, calculs par stratégie).
+- **Historique** des tours (journal + export `.txt`).
+- Paramètres configurables (solde initial, vitesse `sleep`, activer/désactiver ANSI).
+- Mode **simulation** (séries de coups auto pour voir l’espérance de gain).
+
+---
+
+## 📄 Licence
+Usage libre pour l’apprentissage. Ajoutez une licence si vous partagez le dépôt (MIT par ex.).
