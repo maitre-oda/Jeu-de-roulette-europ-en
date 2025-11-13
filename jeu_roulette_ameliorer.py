@@ -49,9 +49,9 @@ derniere_mise_numero = None
 
 
 while argent_joueur > 0:
-    print(f"Vous disposez de {argent_joueur}\n")
-    print("Voici les différentes stratégies : \n")
     if not rejouer :
+        print(f"Vous disposez de {argent_joueur}\n")
+        print("Voici les différentes stratégies : \n")
         for i, element in enumerate(mess_depart, 1):
             print(f"{i}. {element}")
 
