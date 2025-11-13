@@ -4,6 +4,7 @@
 Petit jeu de **roulette** en Python jouable dans le terminal.  
 Le joueur démarre avec un **solde initial** et peut parier selon **trois stratégies** : `Couleur`, `Chiffres`, ou `Mixte`.  
 Après chaque manche, il peut **rejouer exactement la même mise** (mêmes paramètres) sans tout ressaisir.
+Le programme inclut un historique persistant des tirages, stocké dans un fichier texte local.
 
 ---
 
@@ -93,7 +94,19 @@ Sinon, retour au menu.
 - Sur **Windows**, utilisez un terminal compatible ANSI (Windows Terminal, VS Code, ou activez le support ANSI).
 
 ---
+## 📄 Historique des tirages
+📁 Fichier utilisé : historique_tirages.txt
 
+- Chaque tirage est automatiquement :
+
+- ajouté au fichier
+
+- affiché en fin de manche (jusqu’à 50 derniers)
+
+- restauré au démarrage suivant
+
+---
+📌 Le fichier est inclus dans le dépôt, et doit être vide lors de la première installation.
 ## 🧩 Validation des entrées
 - Saisie sécurisée des **entiers** (mises/numéros)
 - **Bornes** vérifiées (numéros `0..36`, mises **> 0**)
