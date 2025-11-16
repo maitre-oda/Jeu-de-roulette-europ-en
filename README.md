@@ -1,10 +1,11 @@
 # 🎰 Jeu de Roulette (Python, terminal)
 
 ## 📍 Aperçu
-Petit jeu de **roulette** en Python jouable dans le terminal.  
+Petit jeu de **roulette européenne** en Python, jouable dans le terminal.  
 Le joueur démarre avec un **solde initial** et peut parier selon **trois stratégies** : `Couleur`, `Chiffres`, ou `Mixte`.  
-Après chaque manche, il peut **rejouer exactement la même mise** (mêmes paramètres) sans tout ressaisir.
-Le programme inclut un historique persistant des tirages, stocké dans un fichier texte local.
+
+Après chaque manche, il peut **rejouer exactement la même mise** (mêmes paramètres) sans tout ressaisir.  
+Le programme conserve un **historique persistant des tirages** dans un fichier texte local, géré via le module `pathlib` pour une compatibilité renforcée entre systèmes.
 
 ---
 
@@ -12,10 +13,10 @@ Le programme inclut un historique persistant des tirages, stocké dans un fichie
 
 ### Prérequis
 - **Python 3.8+**
-- Aucune dépendance externe (utilise `random`, `time`, `sys`).
+- Aucune dépendance externe (utilise uniquement la bibliothèque standard : `random`, `time`, `sys`, `pathlib`).
 
-### Exécution
 ### 🔹 Cloner le dépôt
+
 #### 💻 macOS / Linux
 Ouvrez un terminal et exécutez :
 ```bash
@@ -23,17 +24,20 @@ git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
 cd Jeu-de-roulette-europ-en
 python3 jeu_de_roulette.py
 ```
-🪟 Windows :
+
+#### 🪟 Windows
 Ouvrez PowerShell ou CMD, puis exécutez :
-```
+```bash
 git clone https://github.com/maitre-oda/Jeu-de-roulette-europ-en.git
 cd Jeu-de-roulette-europ-en
 py jeu_de_roulette.py
 ```
-⚠️ Si la commande py ne fonctionne pas, essayez :
-```
+
+⚠️ Si la commande `py` ne fonctionne pas, essayez :
+```bash
 python jeu_de_roulette.py
 ```
+
 ---
 
 ## 🎮 Règles & Stratégies
@@ -48,7 +52,7 @@ python jeu_de_roulette.py
 - La **mise** saisie est **par numéro**.
 - Si **un de vos numéros sort** :
   - **Gain net** = `(36 - k) × mise`, où `k` = nombre de numéros joués  
-    (car vous gagnez `35 × mise` sur le bon numéro et perdez `mise` sur chacun des autres)
+    (car vous gagnez `35 × mise` sur le bon numéro et perdez `mise` sur chacun des autres).
 - Sinon :
   - **Perte** = `k × mise`
 
@@ -61,13 +65,14 @@ python jeu_de_roulette.py
   - Numéro KO, couleur OK : `- k × mise_numero + mise_couleur`
   - Numéro KO, couleur KO : `- k × mise_numero - mise_couleur`
 
-> ℹ️ Les tirages affichent aussi la **couleur** tirée. Le **0** est considéré **vert**.
+> ℹ️ Les tirages affichent aussi la **couleur** tirée. Le **0** est considéré **vert** (comme en roulette européenne).
 
 ---
 
 ## 🔁 Rejouer la même mise
+
 À la fin d’une manche, le programme propose :
-```
+```text
 Voulez-vous rejouer la même chose ? (o/n)
 ```
 
@@ -81,41 +86,59 @@ Le programme vérifie que **votre solde** permet de rejouer **exactement** la m�
 - Chiffres : `k × mise ≤ solde`
 - Mixte : `mise_couleur + k × mise_numero ≤ solde`
 
-Sinon, retour au menu.
+Si ce n’est pas possible, retour au menu principal.
 
 ### Variables internes utilisées
+Pour gérer cette fonctionnalité, plusieurs variables mémorisent le dernier tour :
 - `rejouer` (bool) : indique si on répète la même mise au tour suivant  
-- `dernier_choix`, `dernier_couleur`, `dernier_mise_couleur`, `dernier_liste_numeros`, `dernier_mise_numero` : mémoires du dernier tour
+- `dernier_choix`, `dernier_couleur`, `dernier_mise_couleur`,  
+  `dernier_liste_numeros`, `dernier_mise_numero` : mémoires du dernier tour
 
 ---
 
 ## 🖥️ Affichage & Couleurs
-- Les couleurs **ANSI** (rouge/noir/vert) sont utilisées pour le tirage.
-- Sur **Windows**, utilisez un terminal compatible ANSI (Windows Terminal, VS Code, ou activez le support ANSI).
+
+- Les couleurs **ANSI** (rouge/noir/vert) sont utilisées pour afficher le résultat du tirage.
+- Sur **Windows**, utilisez de préférence un terminal compatible ANSI (Windows Terminal, VS Code, ou un terminal configuré pour supporter les séquences ANSI).
 
 ---
+
 ## 📄 Historique des tirages
-📁 Fichier utilisé : historique_tirages.txt
 
-- Chaque tirage est automatiquement :
+📁 Fichier utilisé : `historique_tirages.txt`  
+📂 Gestion via `pathlib` pour un chemin de fichier robuste et portable.
 
-- ajouté au fichier
+- À chaque tirage, le résultat est :
+  - ajouté au fichier texte (`append`),
+  - chargé au démarrage suivant (si le fichier existe),
+  - affiché en fin de manche (jusqu’aux **50 derniers** tirages).
+- La lecture et l’écriture sont effectuées en **UTF-8**, via :
+  - `FICHIER_HISTORIQUE.read_text(encoding="utf-8")`
+  - `FICHIER_HISTORIQUE.open("a", encoding="utf-8")` pour l’ajout d’un tirage.
 
-- affiché en fin de manche (jusqu’à 50 derniers)
-
-- restauré au démarrage suivant
+📌 Le fichier est inclus dans le dépôt, et doit être **vide** lors de la première installation.  
+Si le fichier n’existe pas, il sera créé au premier tirage.
 
 ---
-📌 Le fichier est inclus dans le dépôt, et doit être vide lors de la première installation.
+
 ## 🧩 Validation des entrées
-- Saisie sécurisée des **entiers** (mises/numéros)
-- **Bornes** vérifiées (numéros `0..36`, mises **> 0**)
-- Vérification du **solde disponible** avant validation d’une mise
+
+- Saisie sécurisée des **entiers** (mises / numéros).
+- **Bornes** vérifiées :
+  - numéros `0..36`,
+  - mises strictement **> 0**.
+- Vérification du **solde disponible** avant validation d’une mise :
+  - couleur : `mise ≤ solde`,
+  - chiffres : `k × mise ≤ solde`,
+  - mixte : `mise_couleur + k × mise_numero ≤ solde`.
+
+Les entrées invalides sont refusées et redemandées à l’utilisateur.
 
 ---
 
-## 🧪 Exemple rapide 
-```
+## 🧪 Exemple rapide
+
+```text
 Solde actuel : 50
 Stratégie : 1 (Couleur)
 Rouge ou Noir ? : rouge
@@ -136,19 +159,26 @@ Nouveau solde : 50
 ---
 
 ## ⚠️ Limitations connues
-- Programme **100% interactif** (pas de mode non interactif / tests automatisés intégrés).
-- **Duplication** de logique entre stratégies (volontaire ici pour rester sans fonctions).
-- Les gains/pertes reflètent la **roulette européenne** avec **payout 35:1** pour un numéro plein.
+
+- Programme **100% interactif** (pas de mode non interactif ou de tests automatisés intégrés).
+- Une certaine **duplication** de logique entre stratégies (choix assumé pour la lisibilité pédagogique).
+- Les gains/pertes reflètent la **roulette européenne** avec un **payout 35:1** pour un numéro plein.
 
 ---
 
 ## 💡 Idées d’amélioration
+
 - Factoriser en **fonctions** (saisie, tirage, calculs par stratégie).
-- **Historique** des tours (journal + export `.txt`).
-- Paramètres configurables (solde initial, vitesse `sleep`, activer/désactiver ANSI).
-- Mode **simulation** (séries de coups auto pour voir l’espérance de gain).
+- Enrichir l’**historique** des tours (journal détaillé + export `.txt`).
+- Rendre certains paramètres configurables :
+  - solde initial,
+  - temporisation `sleep`,
+  - activation/désactivation des couleurs ANSI.
+- Ajouter un mode **simulation** (séries de coups automatiques pour illustrer l’espérance de gain).
 
 ---
 
 ## 📄 Licence
-Usage libre pour l’apprentissage. Ajoutez une licence si vous partagez le dépôt (MIT par ex.).
+
+Usage libre pour l’apprentissage.  
+Ajoutez une licence si vous partagez le dépôt (par exemple **MIT**).
