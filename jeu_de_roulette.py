@@ -1,4 +1,3 @@
-
 import random
 import time
 import sys
@@ -39,16 +38,25 @@ mess_depart = [
 ]
 
 def couleur_ansi(c):
-    if c == "rouge": return "\033[31m"   # rouge
-    if c == "noir":  return "\033[90m"   # gris clair
-    if c == "vert":  return "\033[32m"   # vert
+    if c == "rouge":
+        return "\033[31m"   # rouge
+    if c == "noir":
+        return "\033[90m"   # gris clair
+    if c == "vert":
+        return "\033[32m"   # vert
     return ""
+
+
 RESET = "\033[0m"
 
+
 def fmt_tirage(n):
-    if n in rouge: c = "rouge"
-    elif n in noir: c = "noir"
-    else: c = "vert"
+    if n in rouge:
+        c = "rouge"
+    elif n in noir:
+        c = "noir"
+    else:
+        c = "vert"
     return f"{couleur_ansi(c)}{n} {RESET}"
 
 
@@ -64,7 +72,7 @@ else:
     print("-" * 60)
 
 
-rejouer = False 
+rejouer = False
 dernier_choix = None
 derniere_couleur = None
 derniere_mise_couleur = None
@@ -88,11 +96,11 @@ while argent_joueur > 0:
         if choix == "4":
             print("Au revoir !")
             sys.exit()
-    else : 
+    else :
         choix = dernier_choix
-    
 
-    if choix == "1" : 
+
+    if choix == "1" :
         print ("Vous avez choisi couleur\n")
         if rejouer:
             couleur_choisie = derniere_couleur
@@ -101,14 +109,14 @@ while argent_joueur > 0:
                 print(f"Mise précédente ({mise}) > solde ({argent_joueur}), impossible de rejouer identique.")
                 rejouer = False
                 continue
-        else : 
+        else :
             while True :
                 couleur_choisie = input("Rouge ou Noir ? : ").strip().lower()
                 if couleur_choisie in {"rouge", "noir"}:
                     break
                 print("Tapez 'rouge' ou 'noir'.")
             while True :
-                try : 
+                try :
                     mise = int(input (f"Quelle somme voulez vous miser sur : {couleur_choisie} ? : "))
                     if mise <= 0:
                             print("La mise doit être > 0.")
@@ -117,7 +125,7 @@ while argent_joueur > 0:
                         print(f"Pas assez d'argent. Solde : {argent_joueur}")
                         continue
                     break
-                except ValueError : 
+                except ValueError :
                     print("Entrez un nombre valide.")
             dernier_choix = "1"
             derniere_couleur = couleur_choisie
@@ -137,15 +145,14 @@ while argent_joueur > 0:
         else:
             while True :
                 choix_num = input("Sur quel(s) chiffre(s) voulez-vous miser ? (ex : 7 ou 7 12 25) : ")
-                try : 
+                try :
                     liste_numeros = [int(x) for x in choix_num.replace(",", " ").split()]
                     if len(liste_numeros) == 0:
                         print("Vous devez saisir au moins un numéro.")
                         continue
                     if all(0 <= x <= 36 for x in liste_numeros):
                         break
-                    else:
-                        print("Les numéros doivent être compris entre 0 et 36.")
+                    print("Les numéros doivent être compris entre 0 et 36.")
                 except ValueError:
                     print("Entrez uniquement des nombres séparés par des espaces ou des virgules.")
 
@@ -177,7 +184,7 @@ while argent_joueur > 0:
             mise_totale = mise_couleur + nombre_de_numero * mise_numero
 
             if (nombre_de_numero == 0) or (mise_totale > argent_joueur):
-                print("Paramètres pourr rejouer invalides (liste vide ou mise trop élevée).")
+                print("Paramètres pour rejouer invalides (liste vide ou mise trop élevée).")
                 rejouer = False
                 continue
         else:
@@ -190,8 +197,8 @@ while argent_joueur > 0:
             while True:
                 try:
                     mise_couleur = int(input(f"Quelle somme voulez-vous miser sur {couleur_choisie} ? : "))
-                    if mise_couleur < 0:
-                        print("La mise doit être positive.")
+                    if mise_couleur <= 0:
+                        print("La mise doit être > 0.")
                         continue
                     break
                 except ValueError:
@@ -207,8 +214,7 @@ while argent_joueur > 0:
                         continue
                     if all(0 <= x <= 36 for x in liste_numeros):
                         break
-                    else:
-                        print("Les numéros doivent être entre 0 et 36.")
+                    print("Les numéros doivent être entre 0 et 36.")
                 except ValueError:
                     print("Entrez uniquement des nombres valides.")
 
@@ -216,10 +222,11 @@ while argent_joueur > 0:
             while True:
                 try:
                     mise_numero = int(input(f"Quelle somme voulez-vous miser sur {', '.join(liste_coloree)} : "))
-                    if mise_numero < 0:
-                        print("La mise doit être positive.")
+                    if mise_numero <= 0:
+                        print("La mise doit être > 0.")
                         continue
-                    if mise_couleur + mise_numero > argent_joueur:
+                    mise_totale = mise_couleur + nombre_de_numero * mise_numero
+                    if mise_totale > argent_joueur:
                         print(f"Pas assez d'argent. Solde : {argent_joueur}")
                         continue
                     break
@@ -232,13 +239,20 @@ while argent_joueur > 0:
             derniere_mise_numero = mise_numero
 
     tirage = random.choice(nombre)
-    if tirage in rouge : couleur_tirage = "rouge"
-    elif tirage in noir : couleur_tirage = "noir"
-    elif tirage in vert : couleur_tirage = "vert"
+    if tirage in rouge:
+        couleur_tirage = "rouge"
+    elif tirage in noir:
+        couleur_tirage = "noir"
+    elif tirage in vert:
+        couleur_tirage = "vert"
+    else:
+        # Sécurité: si le tirage n'est dans aucune liste, considérer comme vert
+        couleur_tirage = "vert"
     historique.append(tirage)
-   
-    FICHIER_HISTORIQUE.open("a", encoding="utf-8").write(f"{tirage}\n")
-                
+
+    with FICHIER_HISTORIQUE.open("a", encoding="utf-8") as f:
+        f.write(f"{tirage}\n")
+
     print("\nPlus rien ne va plus ! ...")
     time.sleep(1)
     print(f"Résultat de la roulette : {fmt_tirage(tirage)}\n")
@@ -291,7 +305,7 @@ while argent_joueur > 0:
         if dernier_choix == "1":
             ok = derniere_mise_couleur is not None and derniere_mise_couleur <= argent_joueur
         elif dernier_choix == "2":
-            ok = (derniere_liste_numero and derniere_mise_numero is not None 
+            ok = (derniere_liste_numero and derniere_mise_numero is not None
                 and derniere_mise_numero * len(derniere_liste_numero) <= argent_joueur)
         elif dernier_choix == "3":
             k = len(derniere_liste_numero or [])
@@ -309,11 +323,3 @@ while argent_joueur > 0:
         rejouer = False
 
 print("\nVous n'avez plus d'argent... Fin de partie.")
-
-    
-
-
-
-
-
-
