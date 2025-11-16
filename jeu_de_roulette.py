@@ -2,7 +2,7 @@
 import random
 import time
 import sys
-import os
+from pathlib import Path
 
 # Le joueur va devoir choisir s'il veut miser les couleurs uniquement
 # ou s'il veut miser sur les chiffres uniquement
@@ -18,17 +18,16 @@ historique = []
 argent_joueur = 50
 
 
-FICHIER_HISTORIQUE = "historique_tirages.txt"
 
-if os.path.exists(FICHIER_HISTORIQUE):
-    with open(FICHIER_HISTORIQUE, "r", encoding="utf-8") as f:
-        for ligne in f:
-            ligne = ligne.strip()
-            if not ligne:
-                continue
+FICHIER_HISTORIQUE = Path(__file__).parent / "historique_tirages.txt"
+
+
+if FICHIER_HISTORIQUE.exists():
+    for ligne in FICHIER_HISTORIQUE.read_text(encoding="utf-8").splitlines():
+        ligne = ligne.strip()
+        if ligne:
             try:
-                n = int(ligne)
-                historique.append(n)
+                historique.append(int(ligne))
             except ValueError:
                 continue
 
@@ -237,8 +236,8 @@ while argent_joueur > 0:
     elif tirage in noir : couleur_tirage = "noir"
     elif tirage in vert : couleur_tirage = "vert"
     historique.append(tirage)
-    with open(FICHIER_HISTORIQUE, "a", encoding="utf-8") as f:
-        f.write(str(tirage) + "\n")
+   
+    FICHIER_HISTORIQUE.open("a", encoding="utf-8").write(f"{tirage}\n")
                 
     print("\nPlus rien ne va plus ! ...")
     time.sleep(1)
@@ -280,7 +279,7 @@ while argent_joueur > 0:
         argent_joueur += net
 
     print(f"Nouveau solde : {argent_joueur}")
-    print(" | ".join(fmt_tirage(n) for n in historique[-50:]))
+    print(" | ".join(fmt_tirage(n) for n in historique[-26:]))
     print("-" * 60)
 
 
