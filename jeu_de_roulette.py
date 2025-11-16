@@ -177,7 +177,7 @@ while argent_joueur > 0:
             mise_totale = mise_couleur + nombre_de_numero * mise_numero
 
             if (nombre_de_numero == 0) or (mise_totale > argent_joueur):
-                print("Paramètres pourr rejouer invalides (liste vide ou mise trop élevée).")
+                print("Paramètres pour rejouer invalides (liste vide ou mise trop élevée).")
                 rejouer = False
                 continue
         else:
@@ -190,8 +190,8 @@ while argent_joueur > 0:
             while True:
                 try:
                     mise_couleur = int(input(f"Quelle somme voulez-vous miser sur {couleur_choisie} ? : "))
-                    if mise_couleur < 0:
-                        print("La mise doit être positive.")
+                    if mise_couleur <= 0:
+                        print("La mise doit être > 0.")
                         continue
                     break
                 except ValueError:
@@ -216,10 +216,11 @@ while argent_joueur > 0:
             while True:
                 try:
                     mise_numero = int(input(f"Quelle somme voulez-vous miser sur {', '.join(liste_coloree)} : "))
-                    if mise_numero < 0:
-                        print("La mise doit être positive.")
+                    if mise_numero <= 0:
+                        print("La mise doit être > 0.")
                         continue
-                    if mise_couleur + mise_numero > argent_joueur:
+                    mise_totale = mise_couleur + nombre_de_numero * mise_numero
+                    if mise_totale > argent_joueur:
                         print(f"Pas assez d'argent. Solde : {argent_joueur}")
                         continue
                     break
@@ -232,12 +233,19 @@ while argent_joueur > 0:
             derniere_mise_numero = mise_numero
 
     tirage = random.choice(nombre)
-    if tirage in rouge : couleur_tirage = "rouge"
-    elif tirage in noir : couleur_tirage = "noir"
-    elif tirage in vert : couleur_tirage = "vert"
+    if tirage in rouge:
+        couleur_tirage = "rouge"
+    elif tirage in noir:
+        couleur_tirage = "noir"
+    elif tirage in vert:
+        couleur_tirage = "vert"
+    else:
+        # Sécurité: si le tirage n'est dans aucune liste, considérer comme vert
+        couleur_tirage = "vert"
     historique.append(tirage)
-   
-    FICHIER_HISTORIQUE.open("a", encoding="utf-8").write(f"{tirage}\n")
+
+    with FICHIER_HISTORIQUE.open("a", encoding="utf-8") as f:
+        f.write(f"{tirage}\n")
                 
     print("\nPlus rien ne va plus ! ...")
     time.sleep(1)
